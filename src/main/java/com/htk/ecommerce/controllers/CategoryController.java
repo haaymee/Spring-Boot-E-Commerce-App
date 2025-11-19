@@ -1,6 +1,6 @@
 package com.htk.ecommerce.controllers;
 
-import com.htk.ecommerce.com.htk.ecommerce.services.ICategoryService;
+import com.htk.ecommerce.services.ICategoryService;
 import com.htk.ecommerce.models.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

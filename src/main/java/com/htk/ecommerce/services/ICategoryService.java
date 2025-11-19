@@ -1,4 +1,4 @@
-package com.htk.ecommerce.com.htk.ecommerce.services;
+package com.htk.ecommerce.services;
 
 import com.htk.ecommerce.models.Category;
 
