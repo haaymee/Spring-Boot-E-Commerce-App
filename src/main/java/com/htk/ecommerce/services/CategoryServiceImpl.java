@@ -1,12 +1,12 @@
 package com.htk.ecommerce.services;
 
+import com.htk.ecommerce.exceptions.APIException;
 import com.htk.ecommerce.exceptions.ResourceNotFoundException;
 import com.htk.ecommerce.models.Category;
 import com.htk.ecommerce.repositories.ICategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,6 +23,14 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public void CreateCategory(Category category) {
+
+        Category existingCategory = categoryRepository.findByCategoryName(category.getCategoryName());
+        if (existingCategory != null)
+            throw new APIException(
+                    String.format("Category %s already exists", existingCategory.getCategoryName()),
+                    HttpStatus.BAD_REQUEST
+            );
+
         categoryRepository.save(category);
     }
 
