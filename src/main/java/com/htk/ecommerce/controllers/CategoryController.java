@@ -33,23 +33,13 @@ public class CategoryController {
 
     @PutMapping("api/public/categories/{categoryId}")
     public ResponseEntity<String> UpdateCategory(@PathVariable Long categoryId, @RequestBody Category categoryData) {
-        try {
-            String status = categoryService.UpdateCategory(categoryId, categoryData);
-            return new ResponseEntity<String>(status, HttpStatus.OK);
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<String>(e.getReason(), e.getStatusCode());
-        }
+        String status = categoryService.UpdateCategory(categoryId, categoryData);
+        return new ResponseEntity<String>(status, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/admin/categories/{categoryId}")
     public ResponseEntity<String> DeleteCategory(@PathVariable Long categoryId) {
-
-        try {
-            String status = categoryService.DeleteCategory(categoryId);
-            return new ResponseEntity<String>(status, HttpStatus.OK);
-        }
-        catch (ResponseStatusException e) {
-            return new ResponseEntity<String>(e.getReason(), e.getStatusCode());
-        }
+        String status = categoryService.DeleteCategory(categoryId);
+        return new ResponseEntity<String>(status, HttpStatus.OK);
     }
 }
