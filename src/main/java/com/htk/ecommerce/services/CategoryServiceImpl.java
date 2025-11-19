@@ -1,5 +1,6 @@
 package com.htk.ecommerce.services;
 
+import com.htk.ecommerce.exceptions.ResourceNotFoundException;
 import com.htk.ecommerce.models.Category;
 import com.htk.ecommerce.repositories.ICategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class CategoryServiceImpl implements ICategoryService {
         List<Category> categories = categoryRepository.findAll();
         Category category = categories.stream()
                 .filter(c -> c.getCategoryId().equals(categoryId)).findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category Resource Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException(Long.toString(categoryId)));
 
         category.setCategoryName(newCategoryData.getCategoryName());
         categoryRepository.save(category);
@@ -43,7 +44,7 @@ public class CategoryServiceImpl implements ICategoryService {
         List<Category> categories = categoryRepository.findAll();
         Category category = categories.stream().
                 filter(c -> c.getCategoryId().equals(categoryId)).findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category Resource Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException(Long.toString(categoryId)));
 
         categoryRepository.delete(category);
 
