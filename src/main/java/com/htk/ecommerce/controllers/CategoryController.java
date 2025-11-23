@@ -1,5 +1,7 @@
 package com.htk.ecommerce.controllers;
 
+import com.htk.ecommerce.payloads.CategoryRequestDTO;
+import com.htk.ecommerce.payloads.CategoryResponseDTO;
 import com.htk.ecommerce.services.ICategoryService;
 import com.htk.ecommerce.models.Category;
 import jakarta.validation.Valid;
@@ -14,32 +16,31 @@ import java.util.List;
 @RestController
 public class CategoryController {
 
-    private ICategoryService categoryService;
+    private final ICategoryService categoryService;
 
     public CategoryController(ICategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
     @GetMapping("/api/public/categories")
-    public ResponseEntity<List<Category>>  GetAllCategories() {
-        return new ResponseEntity<List<Category>>(categoryService.GetAllCategories(), HttpStatus.OK);
+    public ResponseEntity<CategoryResponseDTO>  GetAllCategories() {
+        return new ResponseEntity<>(categoryService.GetAllCategories(), HttpStatus.OK);
     }
 
     @PostMapping("/api/public/categories")
-    public ResponseEntity<String> CreateCategory(@Valid @RequestBody Category category) {
-        categoryService.CreateCategory(category);
-        return new ResponseEntity<String>( "Category added successfully", HttpStatus.OK);
+    public ResponseEntity<CategoryResponseDTO> CreateCategory(@Valid @RequestBody CategoryRequestDTO category) {
+        return new ResponseEntity<>(categoryService.CreateCategory(category), HttpStatus.OK);
     }
 
     @PutMapping("api/public/categories/{categoryId}")
-    public ResponseEntity<String> UpdateCategory(@PathVariable Long categoryId, @RequestBody Category categoryData) {
-        String status = categoryService.UpdateCategory(categoryId, categoryData);
-        return new ResponseEntity<String>(status, HttpStatus.OK);
+    public ResponseEntity<CategoryResponseDTO> UpdateCategory(
+        @PathVariable Long categoryId, @Valid @RequestBody CategoryRequestDTO categoryRequest
+    ) {
+        return new ResponseEntity<>(categoryService.UpdateCategory(categoryId, categoryRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/admin/categories/{categoryId}")
-    public ResponseEntity<String> DeleteCategory(@PathVariable Long categoryId) {
-        String status = categoryService.DeleteCategory(categoryId);
-        return new ResponseEntity<String>(status, HttpStatus.OK);
+    public ResponseEntity<CategoryResponseDTO> DeleteCategory(@PathVariable Long categoryId) {
+        return new ResponseEntity<>(categoryService.DeleteCategory(categoryId), HttpStatus.OK);
     }
 }
