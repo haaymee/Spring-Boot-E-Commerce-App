@@ -7,7 +7,7 @@ import com.htk.ecommerce.payloads.CategoryResponseDTO;
 import java.util.List;
 
 public interface ICategoryService {
-    CategoryResponseDTO GetAllCategories();
+    CategoryResponseDTO GetAllCategories(int pageNumber, int PageSize, String fieldToSort, String sortOrder);
     CategoryResponseDTO CreateCategory(CategoryRequestDTO categoryRequest);
     CategoryResponseDTO UpdateCategory(Long categoryIdToUpdate, CategoryRequestDTO categoryRequest);
     CategoryResponseDTO DeleteCategory(Long categoryId);

@@ -8,6 +8,10 @@ import com.htk.ecommerce.payloads.CategoryResponseDTO;
 import com.htk.ecommerce.repositories.ICategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -26,16 +30,27 @@ public class CategoryServiceImpl implements ICategoryService {
     private ModelMapper modelMapper;
 
     @Override
-    public CategoryResponseDTO GetAllCategories() {
+    public CategoryResponseDTO GetAllCategories(int pageNumber, int pageSize, String fieldToSortBy, String sortOrder) {
 
-        List<Category> categories = categoryRepository.findAll();
-        if (categories.isEmpty())
+        Sort sortDetails = sortOrder.equalsIgnoreCase("asc") ?
+                Sort.by(fieldToSortBy).ascending() : Sort.by(fieldToSortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortDetails);
+        Page<Category> categoryPages = categoryRepository.findAll(pageDetails);
+
+        if (categoryPages.isEmpty())
             throw new APIException("No categories have been created");
 
-        return new CategoryResponseDTO(categories.stream()
-                .map(category ->
-                    modelMapper.map(category, CategoryRequestDTO.class)
-                ).toList());
+        CategoryResponseDTO response = new CategoryResponseDTO(categoryPages.stream().map(
+                category -> modelMapper.map(category, CategoryRequestDTO.class)).toList());
+
+        response.setPageNumber(categoryPages.getNumber());
+        response.setPageSize(categoryPages.getSize());
+        response.setTotalElements(categoryPages.getTotalElements());
+        response.setTotalPages(categoryPages.getTotalPages());
+        response.setLastPage(categoryPages.isLast());
+
+        return response;
     }
 
     @Override

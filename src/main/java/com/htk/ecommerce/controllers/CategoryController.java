@@ -23,8 +23,16 @@ public class CategoryController {
     }
 
     @GetMapping("/api/public/categories")
-    public ResponseEntity<CategoryResponseDTO>  GetAllCategories() {
-        return new ResponseEntity<>(categoryService.GetAllCategories(), HttpStatus.OK);
+    public ResponseEntity<CategoryResponseDTO>  GetAllCategories(
+            @RequestParam(name="pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(name="pageSize", defaultValue = "50", required = false) int pageSize,
+            @RequestParam(name="sortBy", defaultValue = "categoryId", required = false) String fieldToSort,
+            @RequestParam(name="sortOrder", defaultValue = "asc", required = false) String sortOrder
+    ) {
+        return new ResponseEntity<>(
+                categoryService.GetAllCategories(pageNumber, pageSize, fieldToSort, sortOrder),
+                HttpStatus.OK
+        );
     }
 
     @PostMapping("/api/public/categories")
